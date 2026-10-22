@@ -25,7 +25,7 @@ export const Header = ({
         type="button"
         onClick={onToggleTheme}
         title={isDark ? "Modalità chiara" : "Modalità scura"}
-        className="p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
+        className="p-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
       >
         {isDark ? "☀️" : "🌙"}
       </button>

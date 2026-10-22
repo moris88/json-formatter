@@ -75,7 +75,7 @@ export const JsonNode = ({
         onClick={toggle}
       >
         <span
-          className="text-[10px] text-slate-400 w-3 inline-block transition-transform duration-200"
+          className="text-[10px] leading-none text-slate-400 w-3 h-3 shrink-0 inline-flex items-center justify-center transition-transform duration-200"
           style={{ transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)" }}
         >
           ▼
