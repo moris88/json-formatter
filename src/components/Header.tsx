@@ -17,7 +17,7 @@ export const Header = ({
         JSON <span className="text-blue-600 dark:text-blue-400">Formatter</span>
       </h1>
       <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base">
-        Valida, formatta e naviga il tuo codice JSON con nodi collassabili.
+        Valida, formatta e naviga il tuo codice JSON con nodi collassabili. Cerca usando le query in stile SQL o genera le interfacce TypeScript corrispondenti. Scopri un modo semplice per gestire i tuoi dati JSON.
       </p>
     </div>
     <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ export const Header = ({
       <button
         type="button"
         onClick={onToggleRaw}
-        className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
+        className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 text-nowrap hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
       >
         {showRaw ? (
           <>
