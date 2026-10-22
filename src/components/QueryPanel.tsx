@@ -1,5 +1,8 @@
 import { type ReactNode, useState } from "react";
-import { runQuery } from "./query";
+import { downloadCsv } from "../utils/csv";
+import { runQuery } from "../utils/query";
+import { QueryHelp } from "./QueryHelp";
+import { ResultTable } from "./ResultTable";
 
 const EXAMPLES = [
   "SELECT * FROM $",
@@ -7,142 +10,6 @@ const EXAMPLES = [
   "SELECT city, COUNT(*) AS totale FROM users GROUP BY city",
   "SELECT * FROM data.items WHERE name LIKE 'a%' LIMIT 10",
 ];
-
-const formatCell = (v: unknown) => {
-  if (v === undefined) return "";
-  if (v === null) return "null";
-  if (typeof v === "object") return JSON.stringify(v);
-  return String(v);
-};
-
-const isTabularRows = (rows: unknown[]) =>
-  rows.every((r) => r !== null && typeof r === "object" && !Array.isArray(r));
-
-const columnsOf = (rows: unknown[]) =>
-  isTabularRows(rows)
-    ? [...new Set(rows.flatMap((r) => Object.keys(r as object)))]
-    : ["valore"];
-
-const toCsv = (rows: unknown[]) => {
-  const isTabular = isTabularRows(rows);
-  const columns = columnsOf(rows);
-  const csvCell = (v: unknown) => {
-    const s = formatCell(v);
-    return /[",;\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-  };
-  const lines = rows.map((r) =>
-    columns
-      .map((c) => csvCell(isTabular ? (r as Record<string, unknown>)[c] : r))
-      .join(","),
-  );
-  return [columns.map(csvCell).join(","), ...lines].join("\r\n");
-};
-
-const downloadCsv = (rows: unknown[]) => {
-  // BOM per far riconoscere UTF-8 a Excel
-  const blob = new Blob(["﻿", toCsv(rows)], {
-    type: "text/csv;charset=utf-8",
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "risultati.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-};
-
-const QueryHelp = () => (
-  <details className="group text-sm text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 rounded-lg">
-    <summary className="flex items-center gap-2 px-3 py-2 cursor-pointer select-none font-medium list-none [&::-webkit-details-marker]:hidden">
-      <span className="text-[10px] text-slate-400 transition-transform group-open:rotate-90">
-        ▶
-      </span>
-      Come scrivere le query
-    </summary>
-    <div className="px-4 pb-3 flex flex-col gap-2 text-xs leading-relaxed">
-      <p>
-        <code className="font-mono">
-          SELECT campi FROM percorso [WHERE ...] [GROUP BY ...] [ORDER BY ...]
-          [LIMIT n [OFFSET m]]
-        </code>
-      </p>
-      <ul className="list-disc pl-5 flex flex-col gap-1">
-        <li>
-          <b>FROM</b>: percorso dell'array da interrogare (es.{" "}
-          <code className="font-mono">data</code>,{" "}
-          <code className="font-mono">result.items</code>,{" "}
-          <code className="font-mono">a.b[0]</code>).{" "}
-          <code className="font-mono">$</code> è la radice: se è un oggetto,
-          viene trattato come una sola riga.
-        </li>
-        <li>
-          <b>SELECT</b>: <code className="font-mono">*</code>, campi anche
-          annidati (<code className="font-mono">user.name</code>), alias con{" "}
-          <code className="font-mono">AS</code>, aggregati{" "}
-          <code className="font-mono">COUNT SUM AVG MIN MAX</code>.
-        </li>
-        <li>
-          <b>WHERE</b>:{" "}
-          <code className="font-mono">= != &lt; &lt;= &gt; &gt;=</code>,{" "}
-          <code className="font-mono">LIKE 'gpt%'</code> (% = qualsiasi testo, _
-          = un carattere), <code className="font-mono">IN ('a','b')</code>,{" "}
-          <code className="font-mono">IS [NOT] NULL</code>,{" "}
-          <code className="font-mono">AND OR NOT</code> e parentesi.
-        </li>
-        <li>
-          Le stringhe vanno tra apici; i nomi con spazi o caratteri speciali tra
-          backtick: <code className="font-mono">`nome campo`</code>.
-        </li>
-      </ul>
-    </div>
-  </details>
-);
-
-const ResultTable = ({ rows }: { rows: unknown[] }) => {
-  const isTabular = isTabularRows(rows);
-  const columns = columnsOf(rows);
-
-  return (
-    <div className="overflow-auto max-h-96 border border-slate-200 dark:border-slate-700 rounded-xl">
-      <table className="w-full text-sm font-mono text-left">
-        <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800">
-          <tr>
-            <th className="px-3 py-2 text-slate-400 font-medium w-10">#</th>
-            {columns.map((c) => (
-              <th
-                key={c}
-                className="px-3 py-2 text-blue-600 dark:text-blue-400 font-semibold whitespace-nowrap"
-              >
-                {c}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr
-              // biome-ignore lint/suspicious/noArrayIndexKey: le righe non hanno un id stabile
-              key={i}
-              className="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50"
-            >
-              <td className="px-3 py-1.5 text-slate-400">{i + 1}</td>
-              {columns.map((c) => (
-                <td
-                  key={c}
-                  className="px-3 py-1.5 text-slate-700 dark:text-slate-300 whitespace-nowrap max-w-xs truncate"
-                >
-                  {formatCell(
-                    isTabular ? (r as Record<string, unknown>)[c] : r,
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
 
 export const QueryPanel = ({
   data,
