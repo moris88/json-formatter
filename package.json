@@ -6,10 +6,8 @@
   "scripts": {
     "dev": "vite --port 3000",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "format": "biome format",
-    "check": "biome check"
+    "lint": "biome check",
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.3.1",
