@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { generateTypes } from "../utils/typegen";
 
-export const TypesPanel = ({ data }: { data: unknown }) => {
+export const TypesPanel = memo(({ data }: { data: unknown }) => {
   const [rootName, setRootName] = useState("Root");
   const [useType, setUseType] = useState(false);
   const [output, setOutput] = useState<string | null>(null);
@@ -71,4 +71,4 @@ export const TypesPanel = ({ data }: { data: unknown }) => {
       )}
     </section>
   );
-};
+});

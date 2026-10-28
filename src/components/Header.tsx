@@ -17,7 +17,9 @@ export const Header = ({
         JSON <span className="text-blue-600 dark:text-blue-400">Formatter</span>
       </h1>
       <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base">
-        Valida, formatta e naviga il tuo codice JSON con nodi collassabili. Cerca usando le query in stile SQL o genera le interfacce TypeScript corrispondenti. Scopri un modo semplice per gestire i tuoi dati JSON.
+        Valida, formatta e naviga il tuo codice JSON con nodi collassabili.
+        Cerca usando le query in stile SQL o genera le interfacce TypeScript
+        corrispondenti. Scopri un modo semplice per gestire i tuoi dati JSON.
       </p>
     </div>
     <div className="flex items-center gap-2">

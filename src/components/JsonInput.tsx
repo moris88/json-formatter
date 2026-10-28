@@ -31,12 +31,16 @@ export const JsonInput = ({
     </div>
     <textarea
       id="json-input"
-      className={`w-full grow min-h-0 p-4 font-mono text-sm border-2 rounded-xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/40 focus:border-blue-500 dark:text-slate-200 outline-none transition-all resize-none shadow-sm ${
+      className={`w-full grow min-h-0 p-4 font-mono text-sm border-2 rounded-xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/40 focus:border-blue-500 dark:text-slate-200 outline-none transition-colors resize-none shadow-sm ${
         hasError
           ? "border-red-300 dark:border-red-800 bg-red-50/30 dark:bg-red-950/20"
           : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900"
       }`}
       placeholder='{"id": 1, "data": {"user": "Mario", "active": true}}'
+      spellCheck={false}
+      autoComplete="off"
+      autoCorrect="off"
+      autoCapitalize="off"
       value={value}
       onChange={(e) => onChange(e.target.value)}
     />

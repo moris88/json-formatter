@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { ErrorMessage } from "./ErrorMessage";
 import { JsonTreeView } from "./JsonTreeView";
 
@@ -7,7 +8,7 @@ interface JsonOutputProps {
   onCopy: () => void;
 }
 
-export const JsonOutput = ({ data, error, onCopy }: JsonOutputProps) => (
+export const JsonOutput = memo(({ data, error, onCopy }: JsonOutputProps) => (
   <section className="flex flex-col gap-2 h-[60vh] min-h-87.5 max-h-175">
     <div className="flex items-center justify-between">
       <span className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
@@ -35,4 +36,4 @@ export const JsonOutput = ({ data, error, onCopy }: JsonOutputProps) => (
       )}
     </div>
   </section>
-);
+));

@@ -13,7 +13,7 @@ export const HistoryBar = ({ history, onSelect }: HistoryBarProps) => {
       <div className="flex flex-wrap gap-2">
         {history.map((item) => (
           <button
-            key={item}
+            key={`${item.length}-${item.slice(0, 50)}-${item.slice(-50)}`}
             type="button"
             onClick={() => onSelect(item)}
             className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-mono text-slate-500 dark:text-slate-400 hover:border-blue-300 hover:text-blue-600 transition-all truncate max-w-37.5 shadow-sm active:scale-95"

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { startTransition, useCallback, useEffect, useState } from "react";
 import { ActionBar } from "./components/ActionBar";
 import { Header } from "./components/Header";
 import { HistoryBar } from "./components/HistoryBar";
@@ -33,9 +33,11 @@ export default function App() {
     }
 
     try {
-      setParsedData(JSON.parse(input));
+      const parsed = JSON.parse(input);
       setError(null);
       setHistory((prev) => pushHistory(prev, input));
+      // Il render dell'albero è pesante: lo marchiamo come non urgente
+      startTransition(() => setParsedData(parsed));
     } catch (e) {
       setError(e instanceof Error ? e.message : "JSON non valido");
       setParsedData(null);
@@ -45,7 +47,8 @@ export default function App() {
   const loadFromHistory = (item: string) => {
     setInput(item);
     try {
-      setParsedData(JSON.parse(item));
+      const parsed = JSON.parse(item);
+      startTransition(() => setParsedData(parsed));
       setError(null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "JSON non valido");
@@ -63,12 +66,17 @@ export default function App() {
     if (text !== null) setInput(text);
   };
 
-  const copyToClipboard = () => {
+  const copyToClipboard = useCallback(() => {
     if (parsedData) {
       navigator.clipboard.writeText(JSON.stringify(parsedData, null, 2));
       alert("JSON formattato copiato negli appunti!");
     }
-  };
+  }, [parsedData]);
+
+  const renderJson = useCallback(
+    (value: unknown) => <JsonTreeView data={value} />,
+    [],
+  );
 
   return (
     <div className="min-h-screen p-4 md:p-8 flex flex-col gap-6 max-w-7xl mx-auto">
@@ -100,10 +108,7 @@ export default function App() {
       {parsedData !== null && <TypesPanel data={parsedData} />}
 
       {parsedData !== null && (
-        <QueryPanel
-          data={parsedData}
-          renderJson={(value) => <JsonTreeView data={value} />}
-        />
+        <QueryPanel data={parsedData} renderJson={renderJson} />
       )}
 
       <ActionBar onFormat={formatJson} onClear={clearAll} />
