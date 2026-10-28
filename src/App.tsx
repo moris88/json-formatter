@@ -100,6 +100,7 @@ export default function App() {
             onChange={setInput}
             onPaste={pasteFromClipboard}
             hasError={!!error}
+            isDark={isDark}
           />
         )}
         <JsonOutput data={parsedData} error={error} onCopy={copyToClipboard} />
